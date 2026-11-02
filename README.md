@@ -118,15 +118,32 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+Output of `python -m src.main` for a user whose favorite genre is rock, second favorite is metal, morning mood is intense, night mood is melancholy, and target energy is 0.85, with the time of day set to morning:
 
-```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+```text
+Loading songs from data/songs.csv...
+Loaded 30 songs from the dataset.
+
+Top 5 recommendations (morning)
+============================================
+1. Storm Runner                 Score: 3.94
+   - genre match (+1.5)
+   - morning mood match (+1.5)
+   - energy closeness (+0.94)
+
+2. Gym Hero                     Score: 2.42
+   - morning mood match (+1.5)
+   - energy closeness (+0.92)
+
+3. Iron Cathedral               Score: 1.63
+   - second favorite genre match (+0.75)
+   - energy closeness (+0.88)
+
+4. Banjo Breakneck              Score: 0.98
+   - energy closeness (+0.98)
+
+5. Afterglow Protocol           Score: 0.97
+   - energy closeness (+0.97)
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->

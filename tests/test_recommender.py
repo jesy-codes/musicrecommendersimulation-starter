@@ -59,3 +59,47 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+def test_recommend_ranks_by_score_not_list_order():
+    user = UserProfile(
+        favorite_genre="lofi",
+        favorite_mood="chill",
+        target_energy=0.4,
+        likes_acoustic=True,
+    )
+    rec = make_small_recommender()
+    results = rec.recommend(user, k=1)
+
+    # The lofi song is second in the catalog, so it only comes first if it was scored
+    assert [song.title for song in results] == ["Chill Lofi Loop"]
+
+
+def test_night_mood_and_second_genre_change_the_ranking():
+    user = UserProfile(
+        favorite_genre="rock",
+        favorite_mood="happy",
+        target_energy=0.6,
+        likes_acoustic=False,
+        second_favorite_genre="lofi",
+        night_mood="chill",
+        time_of_day="night",
+    )
+    rec = make_small_recommender()
+    results = rec.recommend(user, k=2)
+
+    assert results[0].title == "Chill Lofi Loop"
+
+
+def test_explanation_lists_the_scoring_reasons():
+    user = UserProfile(
+        favorite_genre="pop",
+        favorite_mood="happy",
+        target_energy=0.8,
+        likes_acoustic=False,
+    )
+    rec = make_small_recommender()
+
+    explanation = rec.explain_recommendation(user, rec.songs[0])
+
+    assert explanation == "genre match (+1.5); morning mood match (+1.5); energy closeness (+1.00)"

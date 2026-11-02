@@ -21,16 +21,25 @@ Prompts:
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+Think of the recommender as a judge at a talent show. It looks at every song in the catalog, one at a time, and gives each a score based on how well it fits the listener. Then it lines the songs up from highest score to lowest and shows the top five.
 
-Prompts:  
+**What it knows about each song:** its genre, its mood, and its energy (a number from 0 to 1, where a quiet ambient track is low and a loud metal track is high). The catalog also lists tempo, valence (how positive a song sounds), danceability and acousticness, but the score doesn't use them yet.
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+**What it knows about the listener:** their favorite genre, their second favorite genre, the mood they want in the morning, the mood they want at night, and how much energy they want. It also needs to be told whether it's morning or night.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+**How a song earns points:**
+
+- **Genre:** 1.5 points for the favorite genre, or 0.75 for the second favorite.
+- **Mood:** 1.5 points if the song matches the mood for the current time of day.
+- **Energy:** up to 1 point. The closer the song is to the energy the listener wants, the more it earns.
+
+The highest possible score is 4 points. For example, take a listener who loves rock, wants intense music in the morning, and wants an energy level of 0.85. In the morning, the rock song Storm Runner gets 1.5 points for its genre and 1.5 for its intense mood. Its energy of 0.91 is very close to the target, which adds 0.94, for a total of 3.94. At night, that listener wants melancholy music, so the same song loses its mood points and drops to 2.44.
+
+**Breaking ties:** if two songs have the same score, the one closer to the target energy comes first. If they're still tied, they go in alphabetical order by title, so the results are the same on every run.
+
+**Why each song was picked:** every recommendation lists the reasons behind its score, such as "genre match (+1.5)", so the listener can see exactly where the points came from.
+
+**Changes from the starter logic:** the starter profile had one genre, one mood and one energy level. I added a second favorite genre so that related music can earn partial credit, and separate morning and night moods because what people want to hear can change during the day. I also lowered the favorite genre from 2 points to 1.5 so that it counts the same as a mood match and doesn't outweigh it.
 
 ---
 
