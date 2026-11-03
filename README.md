@@ -26,7 +26,7 @@ How this system works?
 What does information `UserProfile store?
 - I think initially, favorite genre, second favorite genre, mood at morning, mood at night, target energy. 
 How does your `Recommender` compute a score for each song?
-Each song earns 1.5 points for matching the favorite genre or 0.75 for matching the second favorite. It earns 1.5 points if its mood matches the user's mood for the current time of day. It also earns up to 1.0 point based on how close its energy is to the target, calculated as 1 − |song energy − target energy|. The song's score is the total of these points.
+Each song earns 1.5 points for matching the favorite genre or 0.75 for matching the second favorite. It earns 1.5 points if its mood matches the user's mood for the current time of day. It also earns up to 2.0 points based on how close its energy is to the target, calculated as 2 × (1 − |song energy − target energy|). The song's score is the total of these points.
 How do you choose which songs to recommend?
 Score every song, sort from highest to lowest, and return the top k, with two small rules added:
 
@@ -53,7 +53,7 @@ PROCESS: repeat for every song
   │                                              │
   │   Genre:  favorite +1.5, second +0.75        │
   │   Mood:   matches current mood +1.5          │
-  │   Energy: + (1 − |song energy − target|)     │
+  │   Energy: + 2 × (1 − |song energy − target|) │
   │                                              │
   │   Returns: score and reasons                 │
   └──────────────────────┬───────────────────────┘
@@ -72,7 +72,7 @@ OUTPUT: recommend_songs()
 
 **Potential Biases**
 
-- **Labels over sound:** genre and mood together are worth up to 3.0 of the 4.0 possible points. A song that misses both can earn at most 1.0, even if its energy is a perfect match.
+- **Labels over sound:** genre and mood together are worth up to 3.0 of the 5.0 possible points. A song that misses both can earn at most 2.0, even if its energy is a perfect match.
 - **Exact label matching:** `pop` and `indie pop` count as different genres, and so do `chill` and `relaxed`. Songs with a close but different label lose points, even if they sound similar.
 - **Uneven catalog:** some genres have several songs and others have only one, and a genre missing from the catalog can never earn genre points. Users with those tastes get weaker recommendations.
 - **Filter bubble:** the system only rewards what the user already likes and never tries anything new, so they may see the same few songs and rarely discover other genres.
@@ -126,24 +126,24 @@ Loaded 30 songs from the dataset.
 
 Top 5 recommendations (morning)
 ============================================
-1. Storm Runner                 Score: 3.94
+1. Storm Runner                 Score: 4.88
    - genre match (+1.5)
    - morning mood match (+1.5)
-   - energy closeness (+0.94)
+   - energy closeness (+1.88)
 
-2. Gym Hero                     Score: 2.42
+2. Gym Hero                     Score: 3.34
    - morning mood match (+1.5)
-   - energy closeness (+0.92)
+   - energy closeness (+1.84)
 
-3. Iron Cathedral               Score: 1.63
+3. Iron Cathedral               Score: 2.51
    - second favorite genre match (+0.75)
-   - energy closeness (+0.88)
+   - energy closeness (+1.76)
 
-4. Banjo Breakneck              Score: 0.98
-   - energy closeness (+0.98)
+4. Banjo Breakneck              Score: 1.96
+   - energy closeness (+1.96)
 
-5. Afterglow Protocol           Score: 0.97
-   - energy closeness (+0.97)
+5. Afterglow Protocol           Score: 1.94
+   - energy closeness (+1.94)
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
@@ -151,26 +151,15 @@ Top 5 recommendations (morning)
 ---
 
 ## Experiments You Tried
-
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+See the model_card.md
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
 - It only works on a tiny catalog
 - It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+- It leans more on genre and mood. 
 
 ---
 
@@ -179,11 +168,5 @@ You will go deeper on this in your model card.
 Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
-
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
 
 

@@ -102,4 +102,4 @@ def test_explanation_lists_the_scoring_reasons():
 
     explanation = rec.explain_recommendation(user, rec.songs[0])
 
-    assert explanation == "genre match (+1.5); morning mood match (+1.5); energy closeness (+1.00)"
+    assert explanation == "genre match (+1.5); morning mood match (+1.5); energy closeness (+2.00)"
